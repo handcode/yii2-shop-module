@@ -23,7 +23,7 @@ use yii\widgets\ActiveForm;
         }
 
         foreach ($filters as $filter) {
-            $data = $filter->tagData();
+            $data = $filter->tagFacets();
             if (!empty($data)) {
                 $field = $form->field($filterForm, 'tag[' . $filter->id . '][]', ['options' => ['class' => 'filter']]);
                 if ($filter->presentation === Filter::PRESENTATION_DROPDOWN) {

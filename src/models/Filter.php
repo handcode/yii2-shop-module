@@ -49,4 +49,20 @@ class Filter extends BaseFilter
     {
         return ArrayHelper::map($this->getTagXFilters()->orderBy(['rank' => SORT_ASC])->all(), 'tag.id', 'tag.name');
     }
+
+    public function tagFacets($productIds = null)
+    {
+        $tagData =  $this->tagData();
+        $tagProductIds = TagXProduct::find()->select('tag_id')->andWhere(['tag_id' => array_keys($tagData)])->distinct()->asArray()->column();
+        $facets = [];
+        foreach ($tagData as $tagid => $tagName) {
+            if (in_array($tagid, $tagProductIds)) {
+                $facets[$tagid] = $tagName;
+            }
+        }
+        // Yii::debug($facets);
+        // Yii::debug($tagProductIds);
+        return $facets;
+    }
+
 }
