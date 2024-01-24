@@ -220,10 +220,9 @@ class ShoppingCartCheckout extends Model
 
         if ($this->_payment !== false) {
             $transaction = Yii::$app->db->beginTransaction();
-            $user = Yii::$app->getUser();
             $config = [
                 'id' => $orderId,
-                'user_id' => $user->getIsGuest() ? null : $user->getId(),
+                'user_id' => $this->getUserIdForNewOrders(),
                 'type' => $this->_payment->paymentProvider()::getType(),
                 'first_name' => $this->first_name,
                 'surname' => $this->surname,
@@ -316,6 +315,17 @@ class ShoppingCartCheckout extends Model
         }
         Yii::error('Error while performing shopping cart checkout', __METHOD__);
         return false;
+    }
+
+    /**
+     * if user is not guest, get the id from the user
+     *
+     * @return int|string|null
+     */
+    protected function getUserIdForNewOrders()
+    {
+        $user = Yii::$app->getUser();
+        return $user->getIsGuest() ? null : $user->getId();
     }
 
     public function getDiscountCodeId()
