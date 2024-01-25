@@ -13,7 +13,7 @@ use yii\helpers\Url;
 use yii\web\View;
 
 ?>
-<table class="table">
+<table class="table order-items-table">
     <thead>
     <tr>
         <th><?= Yii::t('shop', 'Produkt') ?></th>
@@ -28,10 +28,11 @@ use yii\web\View;
     foreach ($order->orderItems as $position):
         $subTotal = $position->single_price * $position->quantity;
         $total += $subTotal;
+        $extra_info = $position->extra_info ? Html::tag('span', $position->extra_info,['class' => 'product-extra-info']) : '';
         ?>
         <tr>
             <td>
-                <?= Html::tag('span', $position->name . ($position->extra_info !== '-' ? ' - ' . $position->extra_info : ''), ['class' => 'product-name']); ?>
+                <?= Html::tag('span', $position->name . $extra_info, ['class' => 'product-name']); ?>
             </td>
             <td>
                 <?= Yii::$app->formatter->asCurrency($position->single_price, Yii::$app->payment->currency) ?>
